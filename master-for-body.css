@@ -1,0 +1,21 @@
+.article h2 {
+    border: none;
+    margin: 0;
+}
+
+.article .info {
+    border-bottom: 2px solid var(--guide-line);
+    margin-bottom: 20px;
+}
+
+.article .time,
+.article .class {
+    margin-bottom: 16px;
+}
+
+.article .body {
+    text-indent: 2em;
+    height: auto;
+    overflow: visible;
+    text-overflow: clip;
+}

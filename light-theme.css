@@ -1,0 +1,14 @@
+:root {
+    /* 选中（滤镜） */
+    --chosen: rgba(0, 0, 0, .1);
+    /* 高级背景 */
+    --premium-bg: #ffffff;
+    /* 低级背景 */
+    --basic-bg: #fafafa;
+    /* 常规文本 */
+    --normal-text: #666666;
+    /* 辅助线 */
+    --guide-line: #dddddd;
+    /* 特殊文本 */
+    --special-text: #555555;
+}
