@@ -5,7 +5,7 @@
 * {
     margin: 0;
     padding: 0;
-    font-family: 微软雅黑;
+    font-family: 思源黑体, 微软雅黑;
     font-weight: 200;
     color: var(--normal-text);
 }
@@ -37,6 +37,7 @@ a {
     position: absolute;
     top: 0;
     right: 0;
+    z-index: 100;
     width: 50px;
     color: white;
     line-height: 50px;
@@ -50,6 +51,7 @@ a {
 .nav {
     position: sticky;
     top: 0;
+    z-index: 99;
     height: 50px;
     box-shadow: 0 0 2px rgba(0, 0, 0, .2);
     background-color: var(--premium-bg);
@@ -76,6 +78,12 @@ a {
 
 .main-contain {
     padding: 30px 24%;
+}
+
+@media screen and (max-width: 800px) {
+    .main-contain {
+        padding: 24px 5% 30px;
+    }
 }
 
 .main-contain::before {

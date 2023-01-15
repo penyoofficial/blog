@@ -1,3 +1,44 @@
+setTheme();
+// 设置主题
+function setTheme() {
+    let theme = "";
+    if (document.documentElement.getAttribute("pagetype") != "pv")
+        theme = "../";
+    theme += (getUrlArgu("theme") + "-theme.css");
+    if (getUrlArgu("theme") != "")
+        document.getElementById("theme").setAttribute("href", theme);
+}
+
+// 获取超链接携带属性
+function getUrlArgu(arguName) {
+    let value = "";
+    try {
+        Array.from(window.location.search.substring(1).split("&")).forEach(argu => {
+            if (argu.split("=")[0] == arguName)
+                value = argu.split("=")[1];
+        });
+    }
+    finally {
+        return value;
+    }
+}
+
+// 设置超链接携带属性
+function setUrlArgu(arguName, arguValue) {
+    let url = window.location.search, i, j;
+    for (i = 0; i < url.length - arguName.length - 1; i++)
+        if (url.slice(i, i + arguName.length) == arguName) {
+            for (j = i + arguName.length + 1; j < url.length; j++)
+                if (url.slice(j, j + 1) == "&")
+                    break;
+            break;
+        }
+    window.location.search =
+        window.location.search.slice(0, i) +
+        arguName + "=" + arguValue +
+        window.location.search.substring(j);
+}
+
 setBG();
 // 随机设置背景
 function setBG() {
@@ -16,29 +57,29 @@ function randomNum(minNum, maxNum) {
     switch (arguments.length) {
         case 1:
             return parseInt(Math.random() * minNum + 1, 10);
-            break;
         case 2:
             return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
-            break;
         default:
             return 0;
-            break;
     }
 }
 
-setPublicA();
+var isAdAvailable = false;
+setPublicA(isAdAvailable);
 // 设置页面前半公共部分
-function setPublicA() {
-    document.writeln("<div class=\"ad\">");
-    document.writeln("    <a href=\"https://penyoofficial.github.io/cyber-museum/\" target=\"_blank\">");
-    document.writeln("        访问我们的赛博博物馆，阅读有趣的硬件评测！");
-    document.writeln("    </a>");
-    document.writeln("    <div onclick=\"removeAD()\">×</div>");
-    document.writeln("</div>");
+function setPublicA(isAdAvailable) {
+    if (isAdAvailable) {
+        document.writeln("<div class=\"ad\">");
+        document.writeln("    <a href=\"https://penyoofficial.github.io/cyber-museum/\" target=\"_blank\">");
+        document.writeln("        访问我们的赛博博物馆，阅读有趣的硬件评测！");
+        document.writeln("    </a>");
+        document.writeln("    <div onclick=\"removeAD()\">×</div>");
+        document.writeln("</div>");
+    }
     document.writeln("<div class=\"nav\">");
     document.writeln("    <div class=\"switch-theme\" onclick=\"switchTheme()\">💡</div>");
     document.writeln("    <div class=\"search\">🔍</div>");
-    document.writeln("    <a href=\"https://penyoofficial.github.io/blog/\">Penyo 博客</a>");
+    document.writeln("    <a id=\"title\" href=\"https://penyoofficial.github.io/blog/\">Penyo 博客</a>");
     document.writeln("</div>");
     document.writeln("<div class=\"main-contain\">");
 }
@@ -47,7 +88,7 @@ addArticle();
 // 添加符合要求的文章结构
 function addArticle() {
     let root = document.documentElement;
-    let id = window.location.search.split("=")[1];
+    let id = getUrlArgu("id");
     if (root.getAttribute("pagetype") == "pv") {
         let dataObj = $.parseJSON($.ajax({
             url: "articles/data.json",
@@ -87,17 +128,6 @@ function addArticle() {
     }
 }
 
-supplyURL();
-// 为<a>型标题补充地址属性（只对主页有效）
-function supplyURL() {
-    Array.from(document.getElementsByClassName("article")).forEach(a => {
-        Array.from(a.getElementsByClassName("title")).forEach(t => {
-            t.setAttribute("href", "articles/index.html?id=" + a.getAttribute("id"));
-            t.setAttribute("target", "_blank");
-        })
-    });
-}
-
 setPublicB();
 // 设置页面后半公共部分
 function setPublicB() {
@@ -106,4 +136,17 @@ function setPublicB() {
     document.writeln("    </div>");
     document.writeln("</div>");
     document.writeln("<a href=\"#\" class=\"back-to-top\">▲</a>");
+}
+
+supplyURL(getUrlArgu("theme"));
+// 为<a>型标题补充地址属性（只对主页有效）
+function supplyURL(theme) {
+    document.getElementById("title").setAttribute("href",
+        "https://penyoofficial.github.io/blog/?theme=" + theme);
+    Array.from(document.getElementsByClassName("article")).forEach(a => {
+        Array.from(a.getElementsByClassName("title")).forEach(t => {
+            t.setAttribute("href", "articles/index.html?theme=" + theme + "&id=" + a.getAttribute("id"));
+            t.setAttribute("target", "_blank");
+        })
+    });
 }
