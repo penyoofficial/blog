@@ -1,8 +1,10 @@
+// 移除广告
 function removeAD() {
     document.getElementsByClassName("ad")[0].remove();
 }
 
 var theme = "";
+// 切换主题
 function switchTheme() {
     let themeObj = document.getElementById("theme");
     theme = themeObj.getAttribute("href");
