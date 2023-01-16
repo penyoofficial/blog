@@ -1,5 +1,5 @@
 var theme = getUrlArgu("theme");
-var ad = getUrlArgu("ad");
+var ad = "false"; // 需要主动展示请更改此值！
 var search = "none";
 
 setTheme(getUrlArgu("theme"));
@@ -71,21 +71,23 @@ setPublicA();
 // 设置页面前半公共部分
 function setPublicA() {
     if (ad != "false") {
-        document.writeln("<div class=\"ad\">");
+        document.writeln("<div id=\"top-ad\">");
         document.writeln("    <a href=\"https://penyoofficial.github.io/cyber-museum/\" target=\"_blank\">");
         document.writeln("        访问我们的赛博博物馆，阅读有趣的硬件评测！");
         document.writeln("    </a>");
         document.writeln("    <div onclick=\"removeAD()\">×</div>");
         document.writeln("</div>");
     }
-    document.writeln("<div class=\"nav\">");
-    document.writeln("    <div class=\"switch-theme\" onclick=\"switchTheme()\">💡</div>");
-    document.writeln("    <div class=\"search\" onclick=\"searchDisplay()\">🔍</div>");
-    document.writeln("    <a id=\"title\" href=\"https://penyoofficial.github.io/blog/\">Penyo 博客</a>");
+    document.writeln("<div id=\"top-nav\">");
+    document.writeln("    <div id=\"switch-theme\" onclick=\"switchTheme()\">💡</div>");
+    if (document.documentElement.getAttribute("pagetype") == "pv")
+        document.writeln("    <div id=\"search-display\" onclick=\"searchDisplay()\">🔍</div>");
+    document.writeln("    <a id=\"top-nav-title\" href=\"https://penyoofficial.github.io/blog/\">Penyo 博客</a>");
     document.writeln("</div>");
-    document.writeln("<div class=\"main-contain\">");
+    document.writeln("<div id=\"main-contain\">");
+    document.writeln("    <img id=\"welcome-actor\" src=\"https://i.328888.xyz/2023/01/17/2JlLy.png\" alt=\"\">");
     document.writeln("    <div id=\"search-box\">");
-    document.writeln("        <input type=\"text\" id=\"search\" placeholder=\"搜索标题或正文...\">");
+    document.writeln("        <input type=\"text\" id=\"search-contain\" placeholder=\"搜索标题或正文...\">");
     document.writeln("        <input type=\"button\" value=\"搜索\" onclick=\"searchFuzzy()\">");
     document.writeln("    </div>");
 }
@@ -95,12 +97,9 @@ addArticle();
 function addArticle() {
     let root = document.documentElement;
     let id = getUrlArgu("id");
+    let isEmpty = true;
     if (root.getAttribute("pagetype") == "pv") {
-        let dataObj = $.parseJSON($.ajax({
-            url: "articles/data.json",
-            dataType: "json",
-            async: false
-        }).responseText);
+        let dataObj = getJSONObj("articles/data.json");
         function addToPv(a) {
             document.writeln("<div class=\"article\" id=\"" + a.id + "\">");
             document.writeln("    <h2><a class=\"title\">" + a.title + "</a></h2>");
@@ -111,13 +110,9 @@ function addArticle() {
             document.writeln("        <p style=\"clear: both;\"></p>");
             document.writeln("    </div>");
             document.writeln("</div>");
+            isEmpty = false;
         };
-        if (getUrlArgu("class") != "")
-            dataObj.data.forEach(a => {
-                if (a.class == decodeURIComponent(getUrlArgu("class")))
-                    addToPv(a);
-            });
-        else if (getUrlArgu("title") != "")
+        if (getUrlArgu("title") != "")
             dataObj.data.forEach(a => {
                 if (a.title.includes.decodeURIComponent(getUrlArgu("title")))
                     addToPv(a);
@@ -128,16 +123,17 @@ function addArticle() {
                     || a.body.includes(decodeURIComponent(getUrlArgu("body"))))
                     addToPv(a);
             });
+        else if (getUrlArgu("class") != "")
+            dataObj.data.forEach(a => {
+                if (a.class == decodeURIComponent(getUrlArgu("class")))
+                    addToPv(a);
+            });
         else
             dataObj.data.forEach(a => {
                 addToPv(a);
             });
     } else if (root.getAttribute("pagetype") == "body") {
-        let dataObj = $.parseJSON($.ajax({
-            url: "data.json",
-            dataType: "json",
-            async: false
-        }).responseText);
+        let dataObj = getJSONObj("data.json");
         try {
             dataObj.data.forEach(article => {
                 if (article.id == id) {
@@ -157,29 +153,43 @@ function addArticle() {
             return;
         }
     }
+    if (isEmpty) {
+        document.writeln("<div class=\"article error-404\">");
+        document.writeln("    <h3>404</h3>");
+        document.writeln("    <div>暂时没有任何文章呢o(￣ヘ￣o＃)</div>");
+        document.writeln("</div>");
+    }
+}
+
+// 获取Json对象
+function getJSONObj(url) {
+    return $.parseJSON($.ajax({
+        url: url,
+        dataType: "json",
+        async: false
+    }).responseText);
 }
 
 setPublicB();
 // 设置页面后半公共部分
 function setPublicB() {
-    document.writeln("    <div class=\"copyright\">");
+    document.writeln("    <div id=\"copyright\">");
     document.writeln("        © 2023 Penyo. All rights reserved.");
     document.writeln("    </div>");
     document.writeln("</div>");
-    document.writeln("<a href=\"#\" class=\"back-to-top\">▲</a>");
+    document.writeln("<a href=\"#\" id=\"back-to-top\">▲</a>");
 }
 
 supplyURL();
 // 为<a>型标题补充地址属性
 function supplyURL() {
     let argus = window.location.search.substring(1);
-    document.getElementById("title").setAttribute("href",
+    document.getElementById("top-nav-title").setAttribute("href",
         "https://penyoofficial.github.io/blog/" + (argus == "" ? "" : "?") + argus);
     Array.from(document.getElementsByClassName("article")).forEach(a => {
         Array.from(a.getElementsByClassName("title")).forEach(t => {
             t.setAttribute("href", "articles/index.html?id=" + a.getAttribute("id") +
                 (argus == "" ? "" : "&") + argus);
-            t.setAttribute("target", "_blank");
         })
     });
 }

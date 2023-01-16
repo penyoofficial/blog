@@ -18,12 +18,12 @@ body {
     text-align: center;
 }
 
-.ad {
+#top-ad {
     position: relative;
     line-height: 50px;
 }
 
-.ad a {
+#top-ad a {
     display: block;
     height: 50px;
     background: var(--themecolor);
@@ -34,7 +34,7 @@ a {
     text-decoration: none;
 }
 
-.ad div {
+#top-ad div {
     position: absolute;
     top: 0;
     right: 0;
@@ -45,11 +45,11 @@ a {
     font-size: 24px;
 }
 
-.ad div:hover {
+#top-ad div:hover {
     background: rgba(255, 255, 255, .2);
 }
 
-.nav {
+#top-nav {
     position: sticky;
     top: 0;
     z-index: 99;
@@ -59,30 +59,65 @@ a {
     line-height: 50px;
 }
 
-.nav div {
-    width: 50px;
-    height: 50px;
+#top-nav div {
+    position: absolute;
+    top: 7px;
+    width: 36px;
+    height: 36px;
+    border-radius: 5px;
     filter: grayscale(1);
+    line-height: 36px;
 }
 
-.nav div:hover {
+#top-nav div:hover {
     background: var(--chosen);
 }
 
-.nav .switch-theme {
-    float: left;
+#top-nav #switch-theme {
+    left: 10px;
 }
 
-.nav .search {
-    float: right;
+#top-nav #search-display {
+    right: 10px;
 }
 
-.main-contain {
+#main-contain {
     position: relative;
     padding: 30px 24%;
 }
 
-.main-contain::before {
+#main-contain::before {
+    position: fixed;
+    top: 100%;
+    left: 0;
+    content: "";
+    display: block;
+    z-index: 102;
+    width: 100%;
+    height: 100%;
+    background: var(--themecolor);
+    animation: welcome-screen 3s;
+}
+
+@keyframes welcome-screen {
+    0% {
+        top: 100%
+    }
+
+    20% {
+        top: 0;
+    }
+
+    55% {
+        top: 0;
+    }
+
+    100% {
+        top: 100%
+    }
+}
+
+#main-contain::after {
     position: fixed;
     top: 5%;
     right: 0;
@@ -97,15 +132,49 @@ a {
 }
 
 @media screen and (max-width: 800px) {
-    .main-contain {
+    #main-contain {
         padding: 24px 5% 30px;
     }
 
-    .main-contain::before {
+    #main-contain::after {
         top: -15%;
         right: -55%;
         width: 250%;
         height: 150%;
+    }
+}
+
+#welcome-actor {
+    position: fixed;
+    bottom: -200px;
+    right: -200px;
+    z-index: 102;
+    width: 200px;
+    height: 200px;
+    animation: welcome-actor 3s;
+}
+
+@keyframes welcome-actor {
+    5% {
+        bottom: -200px;
+        right: -200px;
+    }
+
+    20% {
+        bottom: calc(50% - 100px);
+        right: calc(50% - 100px);
+        transform: rotate(0);
+    }
+
+    55% {
+        bottom: calc(50% - 100px);
+        right: calc(50% - 100px);
+        transform: rotate(-30deg);
+    }
+
+    88.75% {
+        bottom: -200px;
+        right: calc(100% + 200px);
     }
 }
 
@@ -119,6 +188,19 @@ a {
     border-radius: 4px;
     padding: 15px 20px;
     box-shadow: 0 0 2px rgba(0, 0, 0, .2);
+    animation: get-down 1s ease-in-out;
+}
+
+@keyframes get-down {
+    from {
+        opacity: 0;
+        transform: translateY(-25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 .article {
@@ -147,10 +229,13 @@ a {
 .article .body {
     margin-bottom: 16px;
     overflow: hidden;
-    text-overflow: ellipsis;
     width: 100%;
-    height: 52px;
-    line-height: 26px;
+    height: 56px;
+    line-height: 28px;
+}
+
+.article .body>p {
+    display: inline;
 }
 
 .article .time::before {
@@ -169,15 +254,25 @@ a {
     line-height: 32px;
 }
 
-.copyright {
+.error-404 * {
+    text-align: center;
+    line-height: 1.5;
+}
+
+.error-404 h3 {
+    font-size: 58px;
+    font-weight: 300;
+}
+
+#copyright {
     margin-top: 30px;
 }
 
-.back-to-top {
+#back-to-top {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    display: inline-block;
+    display: block;
     width: 50px;
     height: 50px;
     border-radius: 25px;

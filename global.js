@@ -19,8 +19,8 @@ function switchTheme() {
 function removeAD() {
     supplyURL();
     setUrlArgu("ad", "false");
-    document.getElementsByClassName("ad")[0].
-        style.cssText += "display: none;";
+    document.getElementById("top-ad").style.cssText =
+        "display: none;";
 }
 
 // 显隐搜索模块
@@ -41,5 +41,5 @@ function searchDisplay() {
 
 // 模糊搜索
 function searchFuzzy() {
-    setUrlArgu("body", document.getElementById("search").value);
+    setUrlArgu("body", document.getElementById("search-contain").value);
 }
