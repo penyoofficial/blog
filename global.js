@@ -1,12 +1,5 @@
-// 移除广告
-function removeAD() {
-    document.getElementsByClassName("ad")[0].remove();
-    isAdAvailable = false;
-}
-
 // 切换主题
 function switchTheme() {
-    let theme;
     switch (getUrlArgu("theme")) {
         case "light":
             theme = "dark";
@@ -17,7 +10,36 @@ function switchTheme() {
         default:
             theme = "dark";
     }
+    supplyURL();
     setUrlArgu("theme", theme);
-    supplyURL(theme);
-    setTheme();
+    setTheme(getUrlArgu("theme"));
+}
+
+// 移除广告
+function removeAD() {
+    supplyURL();
+    setUrlArgu("ad", "false");
+    document.getElementsByClassName("ad")[0].
+        style.cssText += "display: none;";
+}
+
+// 显隐搜索模块
+function searchDisplay() {
+    switch (search) {
+        case "none":
+            search = "block";
+            break;
+        case "block":
+            search = "none";
+            break;
+        default:
+            search = "none";
+    }
+    document.getElementById("search-box").style.cssText =
+        "display: " + search + ";";
+}
+
+// 模糊搜索
+function searchFuzzy() {
+    setUrlArgu("body", document.getElementById("search").value);
 }

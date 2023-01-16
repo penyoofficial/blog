@@ -7,10 +7,14 @@
 </div>
 <div class="nav">
     <div class="switch-theme" onclick="switchTheme()">💡</div>
-    <div class="search">🔍</div>
+    <div class="search" onclick="searchDisplay()">🔍</div>
     <a id="title" href="https://penyoofficial.github.io/blog/">Penyo 博客</a>
 </div>
 <div class="main-contain">
+    <div id="search-box">
+        <input type="text" id="search" placeholder="搜索标题或正文...">
+        <input type="button" value="搜索" onclick="searchFuzzy()">
+    </div>
     <!-- 这里插入一个或多个文章结构 -->
     <div class="copyright">
         © 2023 Penyo. All rights reserved.
@@ -24,7 +28,7 @@
     <div class="body"></div>
     <div class="info">
         <p class="time"></p>
-        <a class="class"></a>
+        <a class="class" href="javascript: void(0);" onclick="setUrlArgu('class', this.innerText)"></a>
         <p style="clear: both;"></p>
     </div>
 </div>

@@ -14,8 +14,57 @@
 }
 
 .article .body {
-    text-indent: 2em;
-    height: auto;
     overflow: visible;
     text-overflow: clip;
+    height: auto;
+}
+
+.body p {
+    text-indent: 2em;
+}
+
+.body blockquote {
+    position: relative;
+    overflow: hidden;
+    background: var(--premium-bg);
+    border-radius: 8px;
+    margin: 10px 0;
+    padding: 15px 30px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, .1);
+}
+
+.body blockquote p {
+    text-indent: 0;
+}
+
+.body blockquote p::before {
+    position: absolute;
+    left: 0;
+    top: 0;
+    content: "";
+    width: 8px;
+    height: 100%;
+    background: var(--themecolor);
+}
+
+.body code {
+    background: var(--premium-bg);
+    border-radius: 4px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, .1);
+    padding: 3px 6px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.body pre {
+    background: var(--code-bg);
+    border-radius: 8px;
+    margin: 10px 0;
+    padding: 15px 30px;
+}
+
+.body pre code {
+    background: transparent;
+    box-shadow: none;
+    padding: 0;
+    color: white;
 }
