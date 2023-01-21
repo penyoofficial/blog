@@ -1,21 +1,28 @@
+/** 主题 */
 var theme = getUrlArgu("theme");
-var ad = "false"; // 需要主动展示请更改此值！
+/** 广告有无 */
+var ad = "false"; // 需要主动展示请更改值为：getUrlArgu("ad")
+/** 搜索显隐 */
 var search = "none";
+/** \<html\>标签 */
+var html = document.documentElement;
+/** \<body\>标签 */
+var body = document.body;
 
 setTheme(getUrlArgu("theme"));
-// 设置主题
+/** 设置主题。接收主题名为参数。 */
 function setTheme(now) {
-    let goal = "";
-    if (document.documentElement.getAttribute("pagetype") != "pv")
+    var goal = "";
+    if (html.getAttribute("pagetype") != "pv")
         goal = "../";
     goal += (now + "-theme.css");
     if (now == "light" | now == "dark")
         document.getElementById("theme").setAttribute("href", goal);
 }
 
-// 获取超链接携带属性
+/** 获取超链接携带属性。接收属性名为参数。 */
 function getUrlArgu(arguName) {
-    let value = "";
+    var value = "";
     try {
         Array.from(window.location.search.substring(1).split("&")).forEach(argu => {
             if (argu.split("=")[0] == arguName)
@@ -27,9 +34,9 @@ function getUrlArgu(arguName) {
     }
 }
 
-// 设置超链接携带属性
+/** 设置超链接携带属性。接收属性键值对为参数。 */
 function setUrlArgu(arguName, arguValue) {
-    let url = window.location.search, i, j = url.length;
+    var url = window.location.search, i, j = url.length;
     for (i = 0; i < url.length; i++)
         if (url.slice(i, i + arguName.length) == arguName) {
             for (j = i + arguName.length + 1; j < url.length; j++)
@@ -44,9 +51,9 @@ function setUrlArgu(arguName, arguValue) {
 }
 
 setBG();
-// 随机设置背景
+/** 随机设置背景。 */
 function setBG() {
-    var pics = [
+    var pics = [ // 图片列表
         "https://webstatic.mihoyo.com/upload/contentweb/2022/07/04/6f0ef40157e95b0d59455c12f4d3f270_3262958961633311108.png",
         "https://webstatic.mihoyo.com/upload/contentweb/2022/07/04/6c009f0631eb71e697c2da76b608a51e_1586187959203635452.png",
         "https://webstatic.mihoyo.com/upload/contentweb/2022/06/30/494f7aa4668cb7fe2d6d0463e7cc835f_3323890008016600534.png",
@@ -55,7 +62,7 @@ function setBG() {
     document.documentElement.style.cssText += "--bg-pic: url(" + pics[randomNum(0, pics.length - 1)] + ");";
 }
 
-// 获取随机数
+/** 获取随机数。接收闭区间为参数。 */
 function randomNum(minNum, maxNum) {
     switch (arguments.length) {
         case 1:
@@ -67,49 +74,99 @@ function randomNum(minNum, maxNum) {
     }
 }
 
-setPublicA();
-// 设置页面前半公共部分
-function setPublicA() {
-    if (ad != "false") {
-        document.writeln("<div id=\"top-ad\">");
-        document.writeln("    <a href=\"https://penyoofficial.github.io/cyber-museum/\" target=\"_blank\">");
-        document.writeln("        访问我们的赛博博物馆，阅读有趣的硬件评测！");
-        document.writeln("    </a>");
-        document.writeln("    <div onclick=\"removeAD()\">×</div>");
-        document.writeln("</div>");
+setPublic();
+/** 设置页面公共部分。 */
+function setPublic() {
+    // 广告
+    var topAd = createElement("div");
+    topAd.setAttribute("id", "top-ad"); {
+        var a = createElement("a", undefined, "访问我们的赛博博物馆，阅读有趣的硬件评测！");
+        a.setAttribute("href", "https://penyoofficial.github.io/cyber-museum/");
+        a.setAttribute("target", "_blank");
+        var div = createElement("div", undefined, "×");
+        div.setAttribute("onclick", "removeAD();")
     }
-    document.writeln("<div id=\"top-nav\">");
-    document.writeln("    <div id=\"switch-theme\" onclick=\"switchTheme()\">💡</div>");
-    if (document.documentElement.getAttribute("pagetype") == "pv")
-        document.writeln("    <div id=\"search-display\" onclick=\"searchDisplay()\">🔍</div>");
-    document.writeln("    <a id=\"top-nav-title\" href=\"https://penyoofficial.github.io/blog/\">Penyo 博客</a>");
-    document.writeln("</div>");
-    document.writeln("<div id=\"main-contain\">");
-    document.writeln("    <img id=\"welcome-actor\" src=\"https://i.328888.xyz/2023/01/17/2JlLy.png\" alt=\"\">");
-    document.writeln("    <div id=\"search-box\">");
-    document.writeln("        <input type=\"text\" id=\"search-contain\" placeholder=\"搜索标题或正文...\">");
-    document.writeln("        <input type=\"button\" value=\"搜索\" onclick=\"searchFuzzy()\">");
-    document.writeln("    </div>");
+    topAd.appendChild(a);
+    topAd.appendChild(div);
+    if (ad != "false")
+        body.appendChild(topAd);
+    // 顶部导航栏
+    var topNav = createElement("div", "id=top-nav"); {
+        var switchTheme = createElement("div", "id=switch-theme", "💡");
+        switchTheme.setAttribute("onclick", "switchTheme();");
+        var searchDisplay = createElement("div", "id=search-display", "🔍");
+        searchDisplay.setAttribute("onclick", "searchDisplay();");
+        var topNavTitle = createElement("a", "id=top-nav-title", "Penyo 博客");
+        topNavTitle.setAttribute("href", "https://penyoofficial.github.io/blog/");
+    }
+    topNav.appendChild(switchTheme);
+    if (html.getAttribute("pagetype") == "pv")
+        topNav.appendChild(searchDisplay);
+    topNav.appendChild(topNavTitle);
+    body.appendChild(topNav);
+    // 主内容
+    var mainContain = createElement("div", "id=main-contain"); {
+        var welcomeActor = createElement("img", "id=welcome-actor");
+        welcomeActor.setAttribute("src", "https://i.328888.xyz/2023/01/17/2JlLy.png");
+        welcomeActor.setAttribute("alt", "你是想抓到我吗？");
+        var searchBox = createElement("div", "id=search-box"); {
+            var searchContain = createElement("input", "id=search-contain");
+            searchContain.setAttribute("type", "text");
+            searchContain.setAttribute("placeholder", "搜索标题或正文...");
+            var input = createElement("input");
+            input.setAttribute("type", "button");
+            input.setAttribute("value", "搜索");
+            input.setAttribute("onclick", "searchFuzzy();");
+        }
+        searchBox.appendChild(searchContain);
+        searchBox.appendChild(input);
+    }
+    mainContain.appendChild(welcomeActor);
+    mainContain.appendChild(searchBox);
+    addArticle(mainContain);
+    mainContain.appendChild(createElement("div", "id=copyright", "© 2023 Penyo. All rights reserved. "));
+    body.appendChild(mainContain);
+    // 回顶
+    var backToTop = createElement("a", "id=back-to-top", "▲");
+    backToTop.setAttribute("href", "#");
+    body.appendChild(backToTop);
 }
 
-addArticle();
-// 添加符合要求的文章结构
-function addArticle() {
-    let root = document.documentElement;
-    let id = getUrlArgu("id");
-    let isEmpty = true;
-    if (root.getAttribute("pagetype") == "pv") {
-        let dataObj = getJSONObj("articles/data.json");
+/** 创建新的HTML元素。接收标签名、类或ID、内嵌文字为参数，其中类或ID（*classOrId*）必须是形如*class=class-name*的字符串。 */
+function createElement(tag, classOrId, innerText) {
+    var e = document.createElement(tag);
+    if (classOrId != undefined)
+        e.setAttribute(classOrId.split("=")[0], classOrId.split("=")[1]);
+    if (innerText != undefined)
+        e.innerText = innerText;
+    return e;
+}
+
+/** 添加符合要求的文章结构。 */
+function addArticle(container) {
+    var isEmpty = true;
+    if (html.getAttribute("pagetype") == "pv") { // 主页
+        var dataObj = getJSONObj("articles/data.json");
         function addToPv(a) {
-            document.writeln("<div class=\"article\" id=\"" + a.id + "\">");
-            document.writeln("    <h2><a class=\"title\">" + a.title + "</a></h2>");
-            document.writeln("    <div class=\"body\">" + a.body + "</div>");
-            document.writeln("    <div class=\"info\">");
-            document.writeln("        <p class=\"time\">" + a.time + "</p>");
-            document.writeln("        <a class=\"class\" href=\"javascript: void(0);\" onclick=\"setUrlArgu(\'class\', this.innerText)\">" + a.class + "</a>");
-            document.writeln("        <p style=\"clear: both;\"></p>");
-            document.writeln("    </div>");
-            document.writeln("</div>");
+            var article = createElement("div", "class=article");
+            article.setAttribute("id", a.id); {
+                var h2 = createElement("h2");
+                h2.appendChild(createElement("a", "class=title", a.title));
+                var bd = createElement("div", "class=body");
+                bd.innerHTML = a.body;
+                var info = createElement("div", "class=info"); {
+                    var cla = createElement("a", "class=class", a.class);
+                    cla.setAttribute("href", "javascript: void(0);")
+                    cla.setAttribute("onclick", "setUrlArgu('class', this.innerText);")
+                }
+                info.appendChild(createElement("p", "class=time", a.time));
+                info.appendChild(cla);
+                info.appendChild(stylify(createElement("p"), "clear: both;"));
+            }
+            article.appendChild(h2);
+            article.appendChild(bd);
+            article.appendChild(info);
+            container.appendChild(article);
             isEmpty = false;
         };
         if (getUrlArgu("title") != "")
@@ -132,36 +189,36 @@ function addArticle() {
             dataObj.data.forEach(a => {
                 addToPv(a);
             });
-    } else if (root.getAttribute("pagetype") == "body") {
-        let dataObj = getJSONObj("data.json");
-        try {
-            dataObj.data.forEach(article => {
-                if (article.id == id) {
-                    document.writeln("<div class=\"article\" id=\"" + article.id + "\">");
-                    document.writeln("    <h2>" + article.title + "</h2>");
-                    document.writeln("    <div class=\"info\">");
-                    document.writeln("        <p class=\"time\">" + article.time + "</p>");
-                    document.writeln("        <a class=\"class\">" + article.class + "</a>");
-                    document.writeln("        <p style=\"clear: both;\"></p>");
-                    document.writeln("    </div>");
-                    document.writeln("    <div class=\"body\">" + article.body + "</div>");
-                    document.writeln("</div>");
-                    throw new Error();
+    } else if (html.getAttribute("pagetype") == "body") { // 正文页
+        var dataObj = getJSONObj("data.json");
+        dataObj.data.forEach(a => {
+            if (a.id == getUrlArgu("id")) {
+                var article = createElement("div", "class=article"); {
+                    var info = createElement("div", "class=info");
+                    info.appendChild(createElement("p", "class=time", a.time));
+                    info.appendChild(createElement("a", "class=class", a.class));
+                    info.appendChild(stylify(createElement("p"), "clear: both;"));
+                    var bd = createElement("div", "class=body");
+                    bd.innerHTML = a.body;
                 }
-            });
-        } finally {
-            return;
-        }
+                article.appendChild(createElement("h2", undefined, a.title));
+                article.appendChild(info);
+                article.appendChild(bd);
+                if (isEmpty)
+                    container.appendChild(article);
+                isEmpty = false;
+            }
+        });
     }
-    if (isEmpty) {
-        document.writeln("<div class=\"article error-404\">");
-        document.writeln("    <h3>404</h3>");
-        document.writeln("    <div>暂时没有任何文章呢o(￣ヘ￣o＃)</div>");
-        document.writeln("</div>");
+    if (isEmpty) { // 空匹配
+        var error404 = createElement("div", "class=article error-404");
+        error404.appendChild(createElement("h3", undefined, "404"));
+        error404.appendChild(createElement("div", undefined, "暂时没有任何文章呢o(￣ヘ￣o＃)"));
+        container.appendChild(error404);
     }
 }
 
-// 获取Json对象
+/** 获取Json对象。 */
 function getJSONObj(url) {
     return $.parseJSON($.ajax({
         url: url,
@@ -170,20 +227,16 @@ function getJSONObj(url) {
     }).responseText);
 }
 
-setPublicB();
-// 设置页面后半公共部分
-function setPublicB() {
-    document.writeln("    <div id=\"copyright\">");
-    document.writeln("        © 2023 Penyo. All rights reserved.");
-    document.writeln("    </div>");
-    document.writeln("</div>");
-    document.writeln("<a href=\"#\" id=\"back-to-top\">▲</a>");
+/** 风格化。接收元素和样式文本为参数。 */
+function stylify(e, cssText) {
+    e.style.cssText += cssText;
+    return e;
 }
 
 supplyURL();
-// 为<a>型标题补充地址属性
+/** 为\<a\>型标题补充地址属性。 */
 function supplyURL() {
-    let argus = window.location.search.substring(1);
+    var argus = window.location.search.substring(1);
     document.getElementById("top-nav-title").setAttribute("href",
         "https://penyoofficial.github.io/blog/" + (argus == "" ? "" : "?") + argus);
     Array.from(document.getElementsByClassName("article")).forEach(a => {

@@ -1,4 +1,4 @@
-// 切换主题
+/** 切换主题。 */
 function switchTheme() {
     switch (getUrlArgu("theme")) {
         case "light":
@@ -15,7 +15,7 @@ function switchTheme() {
     setTheme(getUrlArgu("theme"));
 }
 
-// 移除广告
+/** 移除广告。 */
 function removeAD() {
     supplyURL();
     setUrlArgu("ad", "false");
@@ -23,7 +23,7 @@ function removeAD() {
         "display: none;";
 }
 
-// 显隐搜索模块
+/** 控制搜索模块显隐。 */
 function searchDisplay() {
     switch (search) {
         case "none":
@@ -39,7 +39,7 @@ function searchDisplay() {
         "display: " + search + ";";
 }
 
-// 模糊搜索
+/** 提交用户输入内容到超链接中。 */
 function searchFuzzy() {
     setUrlArgu("body", document.getElementById("search-contain").value);
 }
