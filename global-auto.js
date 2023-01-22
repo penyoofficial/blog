@@ -123,7 +123,12 @@ function setPublic() {
     }
     mainContain.appendChild(welcomeActor);
     mainContain.appendChild(searchBox);
-    addArticle(mainContain);
+    try {
+        addArticle(mainContain);
+    } catch (e) {
+        console.log("我们与数据库失联了！");
+        display404(mainContain);
+    }
     mainContain.appendChild(createElement("div", "id=copyright", "© 2023 Penyo. All rights reserved. "));
     body.appendChild(mainContain);
     // 回顶
@@ -142,11 +147,19 @@ function createElement(tag, classOrId, innerText) {
     return e;
 }
 
+/** 显示空白匹配应对案。 */
+function display404(container) {
+    var error404 = createElement("div", "class=article error-404");
+    error404.appendChild(createElement("h3", undefined, "404"));
+    error404.appendChild(createElement("div", undefined, "暂时没有任何文章呢o(￣ヘ￣o＃)"));
+    container.appendChild(error404);
+}
+
 /** 添加符合要求的文章结构。 */
 function addArticle(container) {
+    var data = getJSONObj("https://raw.githubusercontent.com/penyoofficial/blog-database/main/articles.json");
     var isEmpty = true;
     if (html.getAttribute("pagetype") == "pv") { // 主页
-        var dataObj = getJSONObj("articles/data.json");
         function addToPv(a) {
             var article = createElement("div", "class=article");
             article.setAttribute("id", a.id); {
@@ -170,28 +183,27 @@ function addArticle(container) {
             isEmpty = false;
         };
         if (getUrlArgu("title") != "")
-            dataObj.data.forEach(a => {
+            data.articles.forEach(a => {
                 if (a.title.includes.decodeURIComponent(getUrlArgu("title")))
                     addToPv(a);
             });
         else if (getUrlArgu("body") != "")
-            dataObj.data.forEach(a => {
+            data.articles.forEach(a => {
                 if (a.title.includes(decodeURIComponent(getUrlArgu("body")))
                     || a.body.includes(decodeURIComponent(getUrlArgu("body"))))
                     addToPv(a);
             });
         else if (getUrlArgu("class") != "")
-            dataObj.data.forEach(a => {
+            data.articles.forEach(a => {
                 if (a.class == decodeURIComponent(getUrlArgu("class")))
                     addToPv(a);
             });
         else
-            dataObj.data.forEach(a => {
+            data.articles.forEach(a => {
                 addToPv(a);
             });
     } else if (html.getAttribute("pagetype") == "body") { // 正文页
-        var dataObj = getJSONObj("data.json");
-        dataObj.data.forEach(a => {
+        data.articles.forEach(a => {
             if (a.id == getUrlArgu("id")) {
                 var article = createElement("div", "class=article"); {
                     var info = createElement("div", "class=info");
@@ -210,12 +222,8 @@ function addArticle(container) {
             }
         });
     }
-    if (isEmpty) { // 空匹配
-        var error404 = createElement("div", "class=article error-404");
-        error404.appendChild(createElement("h3", undefined, "404"));
-        error404.appendChild(createElement("div", undefined, "暂时没有任何文章呢o(￣ヘ￣o＃)"));
-        container.appendChild(error404);
-    }
+    if (isEmpty) // 空匹配
+        display404(container);
 }
 
 /** 获取Json对象。 */
