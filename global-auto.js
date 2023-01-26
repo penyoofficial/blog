@@ -157,7 +157,7 @@ function display404(container) {
 
 /** 添加符合要求的文章结构。 */
 function addArticle(container) {
-    var data = getJSONObj("https://raw.githubusercontent.com/penyoofficial/blog-database/main/articles.json");
+    var data = getJSONObj("https://penyoofficial.github.io/blog-database/articles.json");
     var isEmpty = true;
     if (html.getAttribute("pagetype") == "pv") { // 主页
         function addToPv(a) {

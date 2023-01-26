@@ -23,6 +23,14 @@
     text-indent: 2em;
 }
 
+.article .body strong {
+    font-weight: bold;
+}
+
+.article .body li {
+    margin-left: 2em;
+}
+
 .article .body blockquote {
     position: relative;
     overflow: hidden;

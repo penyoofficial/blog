@@ -86,19 +86,6 @@ a {
     padding: 30px 24%;
 }
 
-#main-contain::before {
-    position: fixed;
-    top: 100%;
-    left: 0;
-    content: "";
-    display: block;
-    z-index: 102;
-    width: 100%;
-    height: 100%;
-    background: var(--themecolor);
-    animation: welcome-screen 3s;
-}
-
 @keyframes welcome-screen {
     0% {
         top: 100%
@@ -117,9 +104,22 @@ a {
     }
 }
 
+#main-contain::before {
+    position: fixed;
+    top: 100%;
+    left: 0;
+    content: "";
+    display: block;
+    z-index: 102;
+    width: 100%;
+    height: 100%;
+    background: var(--themecolor);
+    animation: welcome-screen 3s;
+}
+
 #main-contain::after {
     position: fixed;
-    top: 5%;
+    bottom: -5%;
     right: 0;
     content: "";
     display: block;
@@ -129,29 +129,6 @@ a {
     height: 100%;
     background: right center/contain no-repeat;
     background-image: var(--bg-pic);
-}
-
-@media screen and (max-width: 800px) {
-    #main-contain {
-        padding: 24px 5% 30px;
-    }
-
-    #main-contain::after {
-        top: -15%;
-        right: -55%;
-        width: 250%;
-        height: 150%;
-    }
-}
-
-#welcome-actor {
-    position: fixed;
-    bottom: -200px;
-    right: -200px;
-    z-index: 102;
-    width: 200px;
-    height: 200px;
-    animation: welcome-actor 3s;
 }
 
 @keyframes welcome-actor {
@@ -178,17 +155,14 @@ a {
     }
 }
 
-#search-box {
+#welcome-actor {
     position: fixed;
-    top: 45px;
-    right: 15px;
-    z-index: 101;
-    display: none;
-    background: var(--premium-bg);
-    border-radius: 4px;
-    padding: 15px 20px;
-    box-shadow: 0 0 2px rgba(0, 0, 0, .2);
-    animation: get-down 1s ease-in-out;
+    bottom: -200px;
+    right: -200px;
+    z-index: 102;
+    width: 200px;
+    height: 200px;
+    animation: welcome-actor 3s;
 }
 
 @keyframes get-down {
@@ -201,6 +175,19 @@ a {
         opacity: 1;
         transform: translateY(0);
     }
+}
+
+#search-box {
+    position: fixed;
+    top: 45px;
+    right: 15px;
+    z-index: 101;
+    display: none;
+    background: var(--premium-bg);
+    border-radius: 4px;
+    padding: 15px 20px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, .2);
+    animation: get-down 1s ease-in-out;
 }
 
 .article {
@@ -279,4 +266,15 @@ a {
     background: var(--premium-bg);
     box-shadow: 0 0 2px rgba(0, 0, 0, .2);
     line-height: 50px;
+}
+
+@media screen and (max-width: 800px) {
+    #main-contain {
+        padding: 24px 5% 30px;
+    }
+
+    #main-contain::after {
+        right: -75%;
+        width: 300%;
+    }
 }
