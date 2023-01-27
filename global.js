@@ -1,6 +1,6 @@
 /** 切换主题。 */
 function switchTheme() {
-    switch (getUrlArgu("theme")) {
+    switch (localStorage.getItem("pb-theme")) {
         case "light":
             theme = "dark";
             break;
@@ -10,17 +10,15 @@ function switchTheme() {
         default:
             theme = "dark";
     }
-    supplyURL();
-    setUrlArgu("theme", theme);
-    setTheme(getUrlArgu("theme"));
+    localStorage.setItem("pb-theme", theme);
+    setTheme(theme);
 }
 
 /** 移除广告。 */
 function removeAD() {
-    supplyURL();
-    setUrlArgu("ad", "false");
-    document.getElementById("top-ad").style.cssText =
-        "display: none;";
+    sessionStorage.setItem("pb-ad", "false");
+    stylify(document.getElementById("top-ad"),
+        "display: none;");
 }
 
 /** 控制搜索模块显隐。 */
@@ -35,8 +33,8 @@ function searchDisplay() {
         default:
             search = "none";
     }
-    document.getElementById("search-box").style.cssText =
-        "display: " + search + ";";
+    stylify(document.getElementById("search-box"),
+        "display: " + search + ";");
 }
 
 /** 提交用户输入内容到超链接中。 */

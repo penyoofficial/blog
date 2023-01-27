@@ -1,7 +1,7 @@
 /** 主题 */
-var theme = getUrlArgu("theme");
+var theme = localStorage.getItem("pb-theme");
 /** 广告有无 */
-var ad = "false"; // 需要主动展示请更改值为：getUrlArgu("ad")
+var ad = sessionStorage.getItem("pb-ad");
 /** 搜索显隐 */
 var search = "none";
 /** \<html\>标签 */
@@ -9,7 +9,7 @@ var html = document.documentElement;
 /** \<body\>标签 */
 var body = document.body;
 
-setTheme(getUrlArgu("theme"));
+setTheme(theme);
 /** 设置主题。接收主题名为参数。 */
 function setTheme(now) {
     var goal = "";
@@ -184,7 +184,7 @@ function addArticle(container) {
         };
         if (getUrlArgu("title") != "")
             data.articles.forEach(a => {
-                if (a.title.includes.decodeURIComponent(getUrlArgu("title")))
+                if (a.title.includes(decodeURIComponent(getUrlArgu("title"))))
                     addToPv(a);
             });
         else if (getUrlArgu("body") != "")
@@ -244,13 +244,9 @@ function stylify(e, cssText) {
 supplyURL();
 /** 为\<a\>型标题补充地址属性。 */
 function supplyURL() {
-    var argus = window.location.search.substring(1);
-    document.getElementById("top-nav-title").setAttribute("href",
-        "https://penyoofficial.github.io/blog/" + (argus == "" ? "" : "?") + argus);
     Array.from(document.getElementsByClassName("article")).forEach(a => {
         Array.from(a.getElementsByClassName("title")).forEach(t => {
-            t.setAttribute("href", "articles/index.html?id=" + a.getAttribute("id") +
-                (argus == "" ? "" : "&") + argus);
+            t.setAttribute("href", "articles/index.html?id=" + a.getAttribute("id"));
         })
     });
 }
