@@ -2,6 +2,7 @@
 var theme = localStorage.getItem("pb-theme");
 /** 广告有无 */
 var ad = sessionStorage.getItem("pb-ad");
+ad = "false"; // 默认关闭广告
 /** 搜索显隐 */
 var search = "none";
 /** \<html\>标签 */
@@ -9,7 +10,6 @@ var html = document.documentElement;
 /** \<body\>标签 */
 var body = document.body;
 
-setTheme(theme);
 /** 设置主题。接收主题名为参数。 */
 function setTheme(now) {
     var goal = "";
@@ -19,38 +19,8 @@ function setTheme(now) {
     if (now == "light" | now == "dark")
         document.getElementById("theme").setAttribute("href", goal);
 }
+setTheme(theme);
 
-/** 获取超链接携带属性。接收属性名为参数。 */
-function getUrlArgu(arguName) {
-    var value = "";
-    try {
-        Array.from(window.location.search.substring(1).split("&")).forEach(argu => {
-            if (argu.split("=")[0] == arguName)
-                value = argu.split("=")[1];
-        });
-    }
-    finally {
-        return value;
-    }
-}
-
-/** 设置超链接携带属性。接收属性键值对为参数。 */
-function setUrlArgu(arguName, arguValue) {
-    var url = window.location.search, i, j = url.length;
-    for (i = 0; i < url.length; i++)
-        if (url.slice(i, i + arguName.length) == arguName) {
-            for (j = i + arguName.length + 1; j < url.length; j++)
-                if (url.slice(j, j + 1) == "&")
-                    break;
-            break;
-        }
-    window.location.search =
-        window.location.search.slice(0, i) +
-        ((i == j && url.length > 1) ? "&" : "") + arguName + "=" + arguValue +
-        window.location.search.substring(j);
-}
-
-setBG();
 /** 随机设置背景。 */
 function setBG() {
     var pics = [ // 图片列表
@@ -61,20 +31,8 @@ function setBG() {
     ];
     document.documentElement.style.cssText += "--bg-pic: url(" + pics[randomNum(0, pics.length - 1)] + ");";
 }
+setBG();
 
-/** 获取随机数。接收闭区间为参数。 */
-function randomNum(minNum, maxNum) {
-    switch (arguments.length) {
-        case 1:
-            return parseInt(Math.random() * minNum + 1, 10);
-        case 2:
-            return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
-        default:
-            return 0;
-    }
-}
-
-setPublic();
 /** 设置页面公共部分。 */
 function setPublic() {
     // 广告
@@ -113,13 +71,13 @@ function setPublic() {
             var searchContain = createElement("input", "id=search-contain");
             searchContain.setAttribute("type", "text");
             searchContain.setAttribute("placeholder", "搜索标题或正文...");
-            var input = createElement("input");
-            input.setAttribute("type", "button");
-            input.setAttribute("value", "搜索");
-            input.setAttribute("onclick", "searchFuzzy();");
+            var searchSubmit = createElement("input", "id=search-submit");
+            searchSubmit.setAttribute("type", "button");
+            searchSubmit.setAttribute("value", "搜索");
+            searchSubmit.setAttribute("onclick", "searchFuzzy();");
         }
         searchBox.appendChild(searchContain);
-        searchBox.appendChild(input);
+        searchBox.appendChild(searchSubmit);
     }
     mainContain.appendChild(welcomeActor);
     mainContain.appendChild(searchBox);
@@ -136,16 +94,7 @@ function setPublic() {
     backToTop.setAttribute("href", "#");
     body.appendChild(backToTop);
 }
-
-/** 创建新的HTML元素。接收标签名、类或ID、内嵌文字为参数，其中类或ID（*classOrId*）必须是形如*class=class-name*的字符串。 */
-function createElement(tag, classOrId, innerText) {
-    var e = document.createElement(tag);
-    if (classOrId != undefined)
-        e.setAttribute(classOrId.split("=")[0], classOrId.split("=")[1]);
-    if (innerText != undefined)
-        e.innerText = innerText;
-    return e;
-}
+setPublic();
 
 /** 显示空白匹配应对案。 */
 function display404(container) {
@@ -226,22 +175,6 @@ function addArticle(container) {
         display404(container);
 }
 
-/** 获取Json对象。 */
-function getJSONObj(url) {
-    return $.parseJSON($.ajax({
-        url: url,
-        dataType: "json",
-        async: false
-    }).responseText);
-}
-
-/** 风格化。接收元素和样式文本为参数。 */
-function stylify(e, cssText) {
-    e.style.cssText += cssText;
-    return e;
-}
-
-supplyURL();
 /** 为\<a\>型标题补充地址属性。 */
 function supplyURL() {
     Array.from(document.getElementsByClassName("article")).forEach(a => {
@@ -250,3 +183,4 @@ function supplyURL() {
         })
     });
 }
+supplyURL();
