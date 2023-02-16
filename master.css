@@ -59,7 +59,8 @@ a {
     line-height: 50px;
 }
 
-#top-nav div {
+#switch-theme,
+#search-display {
     position: absolute;
     top: 7px;
     width: 36px;
@@ -69,21 +70,69 @@ a {
     line-height: 36px;
 }
 
-#top-nav div:hover {
+#switch-theme:hover,
+#search-display:hover {
     background: var(--chosen);
 }
 
-#top-nav #switch-theme {
+#switch-theme {
     left: 10px;
 }
 
-#top-nav #search-display {
+#search-display {
     right: 10px;
+}
+
+@keyframes get-down {
+    from {
+        opacity: 0;
+        transform: translateY(-25px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#search-box {
+    position: fixed;
+    top: 45px;
+    right: 15px;
+    z-index: 101;
+    display: none;
+    background: var(--premium-bg);
+    border-radius: 4px;
+    padding: 15px 18px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, .2);
+    animation: get-down 0.5s ease-in-out;
+    line-height: 0;
+}
+
+#search-contain {
+    padding: 4px 8px;
+    border: none;
+    outline: none;
+    border-radius: 4px 0 0 4px;
+    box-shadow: 0 0 1px rgba(0, 0, 0, .2) inset;
+    background: var(--basic-bg);
+}
+
+#search-submit {
+    padding: 4px 8px;
+    border: none;
+    border-radius: 0 4px 4px 0;
+    background: var(--themecolor);
+    color: #ffffff;
+}
+
+#search-submit:hover {
+    filter: brightness(90%);
 }
 
 #main-contain {
     position: relative;
-    padding: 30px 24%;
+    padding: 36px 24%;
 }
 
 @keyframes welcome-screen {
@@ -163,51 +212,6 @@ a {
     width: 200px;
     height: 200px;
     animation: welcome-actor 3s;
-}
-
-@keyframes get-down {
-    from {
-        opacity: 0;
-        transform: translateY(-25px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-#search-box {
-    position: fixed;
-    top: 45px;
-    right: 15px;
-    z-index: 101;
-    display: none;
-    background: var(--premium-bg);
-    border-radius: 4px;
-    padding: 15px 20px;
-    box-shadow: 0 0 2px rgba(0, 0, 0, .2);
-    animation: get-down 1s ease-in-out;
-}
-
-#search-contain {
-    padding: 4px 8px;
-    border: none;
-    border-radius: 4px 0 0 4px;
-    box-shadow: 0 0 1px rgba(0, 0, 0, .2) inset;
-    background: var(--basic-bg);
-}
-
-#search-submit {
-    padding: 4px 8px;
-    border: none;
-    border-radius: 0 4px 4px 0;
-    background: var(--themecolor);
-    color: #ffffff;
-}
-
-#search-submit:hover {
-    filter: brightness(90%);
 }
 
 .article {

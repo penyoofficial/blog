@@ -1,11 +1,13 @@
-/** 创建新的HTML元素。接收标签名、类或ID、内嵌文字为参数，其中类或ID（*classOrId*）必须是形如*class=class-name*的字符串。 */
-function createElement(tag, classOrId, innerText) {
-    var e = document.createElement(tag);
-    if (classOrId != undefined)
-        e.setAttribute(classOrId.split("=")[0], classOrId.split("=")[1]);
-    if (innerText != undefined)
-        e.innerText = innerText;
-    return e;
+/** 获取元素。 */
+function ge(eCode) {
+    switch (eCode[0]) {
+        case "#":
+            return document.getElementById(eCode.slice(1));
+        case ".":
+            return document.getElementsByClassName(eCode.slice(1));
+        default:
+            return document.getElementsByTagName(eCode);
+    }
 }
 
 /** 获取Json对象。 */
@@ -31,6 +33,16 @@ function getUrlArgu(arguName) {
     }
 }
 
+/** 创建新的HTML元素。接收标签名、类或ID、内嵌文字为参数，其中类或ID（*classOrId*）必须是形如*class=class-name*的字符串。 */
+function ne(tag, classOrId, innerHTML) {
+    var e = document.createElement(tag);
+    if (classOrId != undefined)
+        e.setAttribute(classOrId.split("=")[0], classOrId.split("=")[1]);
+    if (innerHTML != undefined)
+        e.innerHTML = innerHTML;
+    return e;
+}
+
 /** 获取随机数。接收闭区间为参数。 */
 function randomNum(minNum, maxNum) {
     switch (arguments.length) {
@@ -46,7 +58,7 @@ function randomNum(minNum, maxNum) {
 /** 移除广告。 */
 function removeAD() {
     sessionStorage.setItem("pb-ad", "false");
-    stylify(document.getElementById("top-ad"),
+    stylify(ge("#top-ad"),
         "display: none;");
 }
 
@@ -62,13 +74,13 @@ function searchDisplay() {
         default:
             search = "none";
     }
-    stylify(document.getElementById("search-box"),
+    stylify(ge("#search-box"),
         "display: " + search + ";");
 }
 
 /** 提交用户输入内容到超链接中。 */
 function searchFuzzy() {
-    setUrlArgu("body", document.getElementById("search-contain").value);
+    setUrlArgu("body", ge("#search-contain").value);
 }
 
 /** 设置超链接携带属性。接收属性键值对为参数。 */
