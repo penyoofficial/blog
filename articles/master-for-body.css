@@ -23,6 +23,10 @@
     text-indent: 2em;
 }
 
+.article .body a {
+    color: var(--themecolor);
+}
+
 .article .body strong {
     font-weight: bold;
 }
@@ -75,4 +79,9 @@
     box-shadow: none;
     padding: 0;
     color: white;
+}
+
+.article .body img {
+    margin-top: 8px;
+    width: 100%;
 }
