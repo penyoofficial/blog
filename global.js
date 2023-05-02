@@ -1,122 +1,110 @@
-/** 获取元素。 */
-function ge(eCode) {
-    switch (eCode[0]) {
-        case "#":
-            return document.getElementById(eCode.slice(1));
-        case ".":
-            return document.getElementsByClassName(eCode.slice(1));
-        default:
-            return document.getElementsByTagName(eCode);
-    }
-}
-
 /** 获取Json对象。 */
 function getJSONObj(url) {
     return $.parseJSON($.ajax({
         url: url,
         dataType: "json",
         async: false
-    }).responseText);
+    }).responseText)
 }
 
 /** 获取超链接携带属性。接收属性名为参数。 */
 function getUrlArgu(arguName) {
-    var value = "";
+    var value = ""
     try {
         Array.from(window.location.search.substring(1).split("&")).forEach(argu => {
             if (argu.split("=")[0] == arguName)
-                value = argu.split("=")[1];
-        });
+                value = argu.split("=")[1]
+        })
     }
     finally {
-        return value;
+        return value
     }
 }
 
 /** 创建新的HTML元素。接收标签名、类或ID、内嵌文字为参数，其中类或ID（*classOrId*）必须是形如*class=class-name*的字符串。 */
-function ne(tag, classOrId, innerHTML) {
-    var e = document.createElement(tag);
+function newEle(tag, classOrId, innerHTML) {
+    var e = document.createElement(tag)
     if (classOrId != undefined)
-        e.setAttribute(classOrId.split("=")[0], classOrId.split("=")[1]);
+        e.setAttribute(classOrId.split("=")[0], classOrId.split("=")[1])
     if (innerHTML != undefined)
-        e.innerHTML = innerHTML;
-    return e;
+        e.innerHTML = innerHTML
+    return e
 }
 
 /** 获取随机数。接收闭区间为参数。 */
 function randomNum(minNum, maxNum) {
     switch (arguments.length) {
         case 1:
-            return parseInt(Math.random() * minNum + 1, 10);
+            return parseInt(Math.random() * minNum + 1, 10)
         case 2:
-            return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10);
+            return parseInt(Math.random() * (maxNum - minNum + 1) + minNum, 10)
         default:
-            return 0;
+            return 0
     }
 }
 
 /** 移除广告。 */
 function removeAD() {
-    sessionStorage.setItem("pb-ad", "false");
-    stylify(ge("#top-ad"),
-        "display: none;");
+    sessionStorage.setItem("pb-ad", "false")
+    stylify(document.querySelector("#top-ad"),
+        "display: none")
 }
 
 /** 控制搜索模块显隐。 */
 function searchDisplay() {
     switch (search) {
         case "none":
-            search = "block";
-            break;
+            search = "block"
+            break
         case "block":
-            search = "none";
-            break;
+            search = "none"
+            break
         default:
-            search = "none";
+            search = "none"
     }
-    stylify(ge("#search-box"),
-        "display: " + search + ";");
+    stylify(document.querySelector("#search-box"),
+        "display: " + search + "")
 }
 
 /** 提交用户输入内容到超链接中。 */
 function searchFuzzy() {
-    setUrlArgu("body", ge("#search-contain").value);
+    setUrlArgu("body", document.querySelector("#search-contain").value)
 }
 
 /** 设置超链接携带属性。接收属性键值对为参数。 */
 function setUrlArgu(arguName, arguValue) {
-    var url = window.location.search, i, j = url.length;
+    var url = window.location.search, i, j = url.length
     for (i = 0; i < url.length; i++)
         if (url.slice(i, i + arguName.length) == arguName) {
             for (j = i + arguName.length + 1; j < url.length; j++)
                 if (url.slice(j, j + 1) == "&")
-                    break;
-            break;
+                    break
+            break
         }
     window.location.search =
         window.location.search.slice(0, i) +
         ((i == j && url.length > 1) ? "&" : "") + arguName + "=" + arguValue +
-        window.location.search.substring(j);
+        window.location.search.substring(j)
 }
 
 /** 风格化。接收元素和样式文本为参数。 */
 function stylify(e, cssText) {
-    e.style.cssText += cssText;
-    return e;
+    e.style.cssText += cssText
+    return e
 }
 
 /** 切换主题。 */
 function switchTheme() {
     switch (localStorage.getItem("pb-theme")) {
         case "light":
-            theme = "dark";
-            break;
+            theme = "dark"
+            break
         case "dark":
-            theme = "light";
-            break;
+            theme = "light"
+            break
         default:
-            theme = "dark";
+            theme = "dark"
     }
-    localStorage.setItem("pb-theme", theme);
-    setTheme(theme);
+    localStorage.setItem("pb-theme", theme)
+    setTheme(theme)
 }
