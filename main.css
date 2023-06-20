@@ -254,12 +254,12 @@ a {
     content: "🕗 ";
 }
 
-.article .class::before {
+.article .category::before {
     content: "🗂️ ";
 }
 
 .article .time,
-.article .class {
+.article .category {
     float: left;
     filter: grayscale(1);
     margin-right: 20px;
@@ -280,17 +280,28 @@ a {
     margin-top: 30px;
 }
 
+@keyframes climb-up {
+    0% {
+        bottom: -100%;
+    }
+
+    100% {
+        bottom: 20px;
+    }
+}
+
 #back-to-top {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    display: block;
+    display: none;
     width: 50px;
     height: 50px;
     border-radius: 25px;
     background: var(--premium-bg);
     box-shadow: 0 0 2px rgba(0, 0, 0, .2);
     line-height: 50px;
+    animation: 1s climb-up;
 }
 
 @media screen and (max-width: 800px) {

@@ -1,4 +1,4 @@
-:root {
+:root[theme="dark"] {
     /* 选中（滤镜） */
     --chosen: rgba(255, 255, 255, .1);
     /* 高级背景 */
