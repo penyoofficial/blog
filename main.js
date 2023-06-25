@@ -1,10 +1,10 @@
-import { Host, AD, DBOptions } from './constant.js'
+import { Host, DBOptions } from './constant.js'
 import * as Util from './utility.js'
 
 /** 主题 */
 var theme = localStorage.getItem("pb-theme")
-/** 广告有无 */
-var ad = sessionStorage.getItem("pb-ad") === "false" ? false : true
+/** 标语有无 */
+var slogan = sessionStorage.getItem("pb-slogan") === "false" ? false : true
 /** 搜索显隐 */
 var search = "none"
 /** \<html\>标签 */
@@ -12,10 +12,10 @@ var html = document.documentElement
 /** \<body\>标签 */
 var body = document.body
 
-/** 移除广告。 */
-function removeAD() {
-    sessionStorage.setItem("pb-ad", false)
-    Util.stylify(document.querySelector("#top-ad"), "display: none")
+/** 移除标语。 */
+function removeSlogan() {
+    sessionStorage.setItem("pb-slogan", false)
+    Util.stylify(document.querySelector("#top-slogan"), "display: none")
 }
 
 /** 设置主题。接收主题名为参数。 */
@@ -74,21 +74,21 @@ function setBG() {
 
 /** 设置页面公共部分。 */
 async function setPublic() {
-    // 广告
-    var topAd = Util.newEle("div")
-    topAd.setAttribute("id", "top-ad")
+    // 标语
+    var topSlogan = Util.newEle("div")
+    topSlogan.setAttribute("id", "top-slogan")
     {
-        const i = AD.TITLE.length
-        var a = Util.newEle("a", undefined, AD.TITLE[Util.randomNumber(i)])
-        if (AD.URL[Util.randomNumber(i)])
-            a.setAttribute("href", AD.URL[Util.randomNumber(i)])
-        a.setAttribute("target", "_blank")
-        var div = Util.newEle("div", "id=remove-ad", "×")
+        const SLOGANS = await Util.getObjFromJSON(DBOptions.URL + "slogans.json")
+        if (!SLOGANS)
+            SLOGANS = ["最坏的情况......"]
+        const i = SLOGANS.slogans.length
+        var a = Util.newEle("a", undefined, SLOGANS.slogans[Util.randomNumber(i)])
+        var div = Util.newEle("div", "id=remove-slogan", "×")
     }
-    topAd.appendChild(a)
-    topAd.appendChild(div)
-    if (ad)
-        body.appendChild(topAd)
+    topSlogan.appendChild(a)
+    topSlogan.appendChild(div)
+    if (slogan)
+        body.appendChild(topSlogan)
     // 顶部导航栏
     var topNav = Util.newEle("div", "id=top-nav")
     {
@@ -145,7 +145,7 @@ function display404(container, errorInfo) {
 
 /** 添加符合要求的文章结构。 */
 async function addArticle(container) {
-    var data = await Util.getObjFromJSON(DBOptions.URL)
+    const ARTICLES = await Util.getObjFromJSON(DBOptions.URL + "articles.json")
     var isEmpty = true
     if (html.getAttribute("pagetype") == "pv") { // 主页
         function addToPv(a) {
@@ -172,27 +172,27 @@ async function addArticle(container) {
             isEmpty = false
         }
         if (Util.getUrlArgu("title") != "")
-            data.articles.forEach(a => {
+            ARTICLES.articles.forEach(a => {
                 if (a.title.includes(decodeURIComponent(Util.getUrlArgu("title"))))
                     addToPv(a)
             })
         else if (Util.getUrlArgu("body") != "")
-            data.articles.forEach(a => {
+            ARTICLES.articles.forEach(a => {
                 if (a.title.includes(decodeURIComponent(Util.getUrlArgu("body")))
                     || a.body.includes(decodeURIComponent(Util.getUrlArgu("body"))))
                     addToPv(a)
             })
         else if (Util.getUrlArgu("category") != "")
-            data.articles.forEach(a => {
+            ARTICLES.articles.forEach(a => {
                 if (a.category == decodeURIComponent(Util.getUrlArgu("category")))
                     addToPv(a)
             })
         else
-            data.articles.forEach(a => {
+            ARTICLES.articles.forEach(a => {
                 addToPv(a)
             })
     } else if (html.getAttribute("pagetype") == "body") { // 正文页
-        data.articles.forEach(a => {
+        ARTICLES.articles.forEach(a => {
             if (a.id == Util.getUrlArgu("id")) {
                 // 标签页标题
                 if (html.getAttribute("pagetype") == "body")
@@ -231,40 +231,38 @@ function supplyURL() {
     })
 }
 
-(() => {
-    window.addEventListener("load", async function () {
-        setTheme(theme)
-        setBG()
-        await setPublic()
-        if (html.getAttribute("pagetype") == "pv")
-            supplyURL()
+window.addEventListener("load", async function () {
+    setTheme(theme)
+    setBG()
+    await setPublic()
+    if (html.getAttribute("pagetype") == "pv")
+        supplyURL()
 
-        if (ad)
-            document.querySelector("#remove-ad").addEventListener("click", function () {
-                removeAD()
-            })
-        document.querySelector("#switch-theme").addEventListener("click", function () {
-            switchTheme()
+    if (slogan)
+        document.querySelector("#remove-slogan").addEventListener("click", function () {
+            removeSlogan()
         })
-        if (html.getAttribute("pagetype") == "pv") {
-            document.querySelector("#search-display").addEventListener("click", function () {
-                searchDisplay()
-            })
-            document.querySelector("#search-submit").addEventListener("click", function () {
-                searchFuzzy()
-            })
-        }
-        document.querySelector("#main-contain").addEventListener("click", function () {
-            if (search != "none")
-                searchDisplay()
-        })
-        window.addEventListener('scroll', function () {
-            var backToTop = document.getElementById('back-to-top')
-            if (window.scrollY > 800)
-                Util.stylify(backToTop, "display: block")
-            else
-                Util.stylify(backToTop, "display: none")
-
-        })
+    document.querySelector("#switch-theme").addEventListener("click", function () {
+        switchTheme()
     })
-})()
+    if (html.getAttribute("pagetype") == "pv") {
+        document.querySelector("#search-display").addEventListener("click", function () {
+            searchDisplay()
+        })
+        document.querySelector("#search-submit").addEventListener("click", function () {
+            searchFuzzy()
+        })
+    }
+    document.querySelector("#main-contain").addEventListener("click", function () {
+        if (search != "none")
+            searchDisplay()
+    })
+    window.addEventListener('scroll', function () {
+        var backToTop = document.getElementById('back-to-top')
+        if (window.scrollY > 800)
+            Util.stylify(backToTop, "display: block")
+        else
+            Util.stylify(backToTop, "display: none")
+
+    })
+})

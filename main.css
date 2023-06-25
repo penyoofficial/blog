@@ -18,12 +18,12 @@ body {
     text-align: center;
 }
 
-#top-ad {
+#top-slogan {
     position: relative;
     line-height: 50px;
 }
 
-#top-ad a {
+#top-slogan a {
     display: block;
     height: 50px;
     background: var(--themecolor);
@@ -34,7 +34,7 @@ a {
     text-decoration: none;
 }
 
-#top-ad div {
+#top-slogan div {
     position: absolute;
     top: 0;
     right: 0;
@@ -45,7 +45,7 @@ a {
     font-size: 24px;
 }
 
-#top-ad div:hover {
+#top-slogan div:hover {
     background: rgba(255, 255, 255, .2);
 }
 
@@ -137,10 +137,6 @@ a {
 
 @keyframes welcome-screen {
     0% {
-        top: 100%
-    }
-
-    20% {
         top: 0;
     }
 
@@ -214,9 +210,24 @@ a {
     animation: welcome-actor 3s;
 }
 
+@keyframes barrier {
+    0% {
+        opacity: 0;
+    }
+
+    99% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
 .article {
     margin-bottom: 48px;
     text-align: left;
+    animation: barrier 1.6s;
 }
 
 .article h2 {
