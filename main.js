@@ -80,9 +80,9 @@ async function setPublic() {
     {
         const SLOGANS = await Util.getObjFromJSON(DBOptions.URL + "slogans.json")
         if (!SLOGANS)
-            SLOGANS = ["最坏的情况......"]
-        const i = SLOGANS.slogans.length
-        var a = Util.newEle("a", undefined, SLOGANS.slogans[Util.randomNumber(i)])
+            SLOGANS = [{ value: "最坏的情况......" }]
+        const i = SLOGANS.length
+        var a = Util.newEle("a", undefined, SLOGANS[Util.randomNumber(i)].value)
         var div = Util.newEle("div", "id=remove-slogan", "×")
     }
     topSlogan.appendChild(a)
@@ -155,13 +155,13 @@ async function addArticle(container) {
                 var h2 = Util.newEle("h2")
                 h2.appendChild(Util.newEle("a", "class=title", a.title))
                 var bd = Util.newEle("div", "class=body")
-                bd.innerHTML = a.body
+                bd.innerHTML = Util.getPlainText(a.body).slice(0, 200) + "......"
                 var info = Util.newEle("div", "class=info")
                 {
                     var cg = Util.newEle("a", "class=category", a.category)
                     cg.setAttribute("href", "javascript: void(0)")
                 }
-                info.appendChild(Util.newEle("p", "class=time", a.time))
+                info.appendChild(Util.newEle("p", "class=time", new Date(a.time.$date).toISOString().slice(0, 10)))
                 info.appendChild(cg)
                 info.appendChild(Util.stylify(Util.newEle("p"), "clear: both"))
             }
@@ -172,27 +172,27 @@ async function addArticle(container) {
             isEmpty = false
         }
         if (Util.getUrlArgu("title") != "")
-            ARTICLES.articles.forEach(a => {
+            ARTICLES.forEach(a => {
                 if (a.title.includes(decodeURIComponent(Util.getUrlArgu("title"))))
                     addToPv(a)
             })
         else if (Util.getUrlArgu("body") != "")
-            ARTICLES.articles.forEach(a => {
+            ARTICLES.forEach(a => {
                 if (a.title.includes(decodeURIComponent(Util.getUrlArgu("body")))
                     || a.body.includes(decodeURIComponent(Util.getUrlArgu("body"))))
                     addToPv(a)
             })
         else if (Util.getUrlArgu("category") != "")
-            ARTICLES.articles.forEach(a => {
+            ARTICLES.forEach(a => {
                 if (a.category == decodeURIComponent(Util.getUrlArgu("category")))
                     addToPv(a)
             })
         else
-            ARTICLES.articles.forEach(a => {
+            ARTICLES.forEach(a => {
                 addToPv(a)
             })
     } else if (html.getAttribute("pagetype") == "body") { // 正文页
-        ARTICLES.articles.forEach(a => {
+        ARTICLES.forEach(a => {
             if (a.id == Util.getUrlArgu("id")) {
                 // 标签页标题
                 if (html.getAttribute("pagetype") == "body")
@@ -201,7 +201,7 @@ async function addArticle(container) {
                 var article = Util.newEle("div", "class=article")
                 {
                     var info = Util.newEle("div", "class=info")
-                    info.appendChild(Util.newEle("p", "class=time", a.time))
+                    info.appendChild(Util.newEle("p", "class=time", new Date(a.time.$date).toISOString().slice(0, 10)))
                     info.appendChild(Util.newEle("a", "class=category", a.category))
                     info.appendChild(Util.stylify(Util.newEle("p"), "clear: both"))
                     var bd = Util.newEle("div", "class=body")

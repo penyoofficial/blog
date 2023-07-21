@@ -57,3 +57,8 @@ export function stylify(e, cssText) {
 export function randomNumber(limit) {
     return Math.floor(Math.random() * 100 % limit)
 }
+
+/** 获得 HTML 代码中的纯文本。 */
+export function getPlainText(html) {
+    return html.replace(/<\/?.+?>/g, "")
+}

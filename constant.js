@@ -6,8 +6,8 @@ export const Host = {
 }
 
 export const DBOptions = {
-    TYPE: "penyodb",
-    URL: "https://penyoofficial.github.io/blog-database/",
+    TYPE: "raw-data",
+    URL: "https://penyoofficial.github.io/penyo-portal-rd/",
     USERNAME: null,
     PASSWORD: null
 }
